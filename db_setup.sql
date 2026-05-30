@@ -422,7 +422,7 @@ INSERT INTO users (id, tenant_id, email, password_hash, role, first_name, last_n
 ('d2222222-2222-2222-2222-222222222222', '8f3e0984-7a3b-489e-b9ef-d4de20e17b88', 'jenkins.os@pvppcoe.ac.in', 'campus123', 'faculty', 'Sarah', 'Jenkins'),
 ('d3333333-3333-3333-3333-333333333333', '8f3e0984-7a3b-489e-b9ef-d4de20e17b88', 'doe.dbms@pvppcoe.ac.in', 'campus123', 'faculty', 'John', 'Doe'),
 ('d4444444-4444-4444-4444-444444444444', '8f3e0984-7a3b-489e-b9ef-d4de20e17b88', 'turing.ada@pvppcoe.ac.in', 'campus123', 'faculty', 'Alan', 'Turing'),
-('f1111111-1111-1111-1111-111111111111', '8f3e0984-7a3b-489e-b9ef-d4de20e17b88', 'prathamesh@pvppcoe.ac.in', 'campus123', 'student', 'Prathamesh', 'S.'),
+('f1111111-1111-1111-1111-111111111111', '8f3e0984-7a3b-489e-b9ef-d4de20e17b88', 'vu2f2324071@pvppcoe.ac.in', 'campus123', 'student', 'Prathamesh', 'S.'),
 ('f2222222-2222-2222-2222-222222222222', '8f3e0984-7a3b-489e-b9ef-d4de20e17b88', 'admin.sion@pvppcoe.ac.in', 'campus123', 'admin', 'PVPPCOE', 'Admin');
 
 -- 4. Map HOD to Department

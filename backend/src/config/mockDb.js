@@ -28,7 +28,7 @@ const mockDb = {
     { id: 'd2222222-2222-2222-2222-222222222222', tenant_id: '8f3e0984-7a3b-489e-b9ef-d4de20e17b88', email: 'jenkins.os@pvppcoe.ac.in', password_hash: 'campus123', role: 'faculty', first_name: 'Sarah', last_name: 'Jenkins' },
     { id: 'd3333333-3333-3333-3333-333333333333', tenant_id: '8f3e0984-7a3b-489e-b9ef-d4de20e17b88', email: 'doe.dbms@pvppcoe.ac.in', password_hash: 'campus123', role: 'faculty', first_name: 'John', last_name: 'Doe' },
     { id: 'd4444444-4444-4444-4444-444444444444', tenant_id: '8f3e0984-7a3b-489e-b9ef-d4de20e17b88', email: 'turing.ada@pvppcoe.ac.in', password_hash: 'campus123', role: 'faculty', first_name: 'Alan', last_name: 'Turing' },
-    { id: 'f1111111-1111-1111-1111-111111111111', tenant_id: '8f3e0984-7a3b-489e-b9ef-d4de20e17b88', email: 'prathamesh@pvppcoe.ac.in', password_hash: 'campus123', role: 'student', first_name: 'Prathamesh', last_name: 'S.' },
+    { id: 'f1111111-1111-1111-1111-111111111111', tenant_id: '8f3e0984-7a3b-489e-b9ef-d4de20e17b88', email: 'vu2f2324071@pvppcoe.ac.in', password_hash: 'campus123', role: 'student', first_name: 'Prathamesh', last_name: 'S.' },
     { id: 'f2222222-2222-2222-2222-222222222222', tenant_id: '8f3e0984-7a3b-489e-b9ef-d4de20e17b88', email: 'admin.sion@pvppcoe.ac.in', password_hash: 'campus123', role: 'admin', first_name: 'PVPPCOE', last_name: 'Admin' }
   ],
 

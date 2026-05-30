@@ -12,7 +12,7 @@ async function verify() {
     const loginRes = await fetch(`${API_URL}/auth/login`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'X-Tenant-ID': TENANT_ID },
-      body: JSON.stringify({ email: 'prathamesh@pvppcoe.ac.in', password: 'campus123' })
+      body: JSON.stringify({ email: 'vu2f2324071@pvppcoe.ac.in', password: 'campus123' })
     });
     const loginData = await loginRes.json();
     if (!loginData.success) throw new Error("Login failed!");
