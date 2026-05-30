@@ -1,0 +1,1591 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CampusOS – PVPPCOE AI Digital College Twin</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            /* PVPPCOE Imperial Navy Blue & Cyber Gold Theme Tokens */
+            --bg-midnight: #070A14;
+            --card-glass: rgba(10, 16, 32, 0.75);
+            --card-glass-hover: rgba(15, 25, 48, 0.88);
+            --border-glass: rgba(245, 166, 35, 0.08);
+            --border-glow: rgba(245, 166, 35, 0.35);
+            --text-primary: #F3F4F6;
+            --text-secondary: #9CA3AF;
+            
+            --accent-indigo: #D4AF37;   /* Cyber Gold Metallic */
+            --accent-violet: #C5A028;   /* Darker Gold */
+            --accent-cyan: #F5A623;     /* Vivid Amber/Gold */
+            --accent-emerald: #10B981;  /* Safe / Present */
+            --accent-rose: #F43F5E;     /* Starvation Risk / Absent */
+            --accent-amber: #FFD700;    /* Bright Gold Glow */
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Outfit', sans-serif;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: var(--bg-midnight);
+            color: var(--text-primary);
+            overflow-x: hidden;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(15, 30, 54, 0.4) 0%, transparent 40%),
+                radial-gradient(circle at 80% 80%, rgba(245, 166, 35, 0.06) 0%, transparent 40%);
+            background-attachment: fixed;
+            height: 100vh;
+            display: flex;
+        }
+
+        /* Sidebar Container */
+        .sidebar {
+            width: 280px;
+            background: rgba(6, 9, 18, 0.95);
+            border-right: 1px solid var(--border-glass);
+            backdrop-filter: blur(20px);
+            display: flex;
+            flex-direction: column;
+            padding: 24px;
+            z-index: 10;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 40px;
+        }
+
+        .logo-icon {
+            font-size: 24px;
+            color: var(--accent-cyan);
+            text-shadow: 0 0 10px rgba(245, 166, 35, 0.5);
+        }
+
+        .logo-text {
+            font-size: 22px;
+            font-weight: 800;
+            letter-spacing: 1px;
+            background: linear-gradient(135deg, #FFD700, #F5A623);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .menu-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            flex-grow: 1;
+        }
+
+        .menu-item {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 14px 16px;
+            border-radius: 12px;
+            cursor: pointer;
+            color: var(--text-secondary);
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border: 1px solid transparent;
+        }
+
+        .menu-item i {
+            font-size: 18px;
+            width: 20px;
+            text-align: center;
+        }
+
+        .menu-item:hover, .menu-item.active {
+            color: var(--text-primary);
+            background: rgba(245, 166, 35, 0.12);
+            border-color: rgba(245, 166, 35, 0.2);
+            box-shadow: 0 4px 20px rgba(245, 166, 35, 0.05);
+        }
+
+        .menu-item.active i {
+            color: var(--accent-cyan);
+            text-shadow: 0 0 8px rgba(245, 166, 35, 0.5);
+        }
+
+        .tenant-badge {
+            margin-top: auto;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--border-glass);
+            border-radius: 12px;
+            padding: 14px;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .tenant-title {
+            font-size: 10px;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+        }
+
+        .tenant-name {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--accent-indigo);
+            line-height: 1.4;
+        }
+
+        /* Main Content Workspace */
+        .workspace {
+            flex-grow: 1;
+            padding: 40px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 32px;
+        }
+
+        /* Header block */
+        .workspace-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header-title h1 {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .header-title p {
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            background: var(--card-glass);
+            padding: 8px 16px;
+            border-radius: 30px;
+            border: 1px solid var(--border-glass);
+        }
+
+        .profile-img {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border: 2px solid var(--accent-cyan);
+            background: #111e36;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            color: #FFD700;
+        }
+
+        /* View Controllers */
+        .view-panel {
+            display: none;
+            flex-direction: column;
+            gap: 32px;
+            animation: fadeIn 0.4s ease;
+        }
+
+        .view-panel.active {
+            display: flex;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Dash Grid System */
+        .grid-12 {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            gap: 24px;
+        }
+
+        .glass-card {
+            background: var(--card-glass);
+            border: 1px solid var(--border-glass);
+            border-radius: 20px;
+            padding: 24px;
+            backdrop-filter: blur(16px);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .glass-card:hover {
+            border-color: var(--border-glow);
+            background: var(--card-glass-hover);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .card-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .card-title i {
+            color: var(--accent-cyan);
+        }
+
+        /* Attendance Circular Dials */
+        .attendance-container {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+            padding: 10px 0;
+        }
+
+        .attendance-ring {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .svg-ring {
+            width: 80px;
+            height: 80px;
+            transform: rotate(-90deg);
+        }
+
+        .ring-bg {
+            fill: none;
+            stroke: rgba(255, 255, 255, 0.03);
+            stroke-width: 8;
+        }
+
+        .ring-progress {
+            fill: none;
+            stroke-width: 8;
+            stroke-linecap: round;
+            transition: stroke-dashoffset 1s ease;
+        }
+
+        .sub-name {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-secondary);
+        }
+
+        /* Timetable slots */
+        .slot-ticker {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .ticker-item {
+            background: rgba(255, 255, 255, 0.01);
+            border: 1px solid rgba(255, 255, 255, 0.03);
+            border-radius: 12px;
+            padding: 12px 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-left: 4px solid var(--accent-indigo);
+            transition: all 0.2s ease;
+        }
+
+        .ticker-item:hover {
+            transform: translateX(4px);
+            background: rgba(255, 255, 255, 0.03);
+        }
+
+        .ticker-time {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12px;
+            color: var(--accent-cyan);
+        }
+
+        .ticker-details h4 {
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .ticker-details p {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        /* Wayfinding Navigation */
+        .map-wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            height: 100%;
+        }
+
+        .map-controls {
+            display: flex;
+            gap: 12px;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, var(--accent-violet), var(--accent-cyan));
+            color: #060913;
+            border: none;
+            border-radius: 8px;
+            padding: 10px 16px;
+            font-weight: 700;
+            cursor: pointer;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s ease;
+        }
+
+        .btn:hover {
+            opacity: 0.9;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 15px rgba(245, 166, 35, 0.3);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 1px solid var(--accent-cyan);
+            color: var(--accent-cyan);
+        }
+
+        .btn-outline:hover {
+            background: rgba(245, 166, 35, 0.1);
+        }
+
+        .map-canvas-container {
+            width: 100%;
+            height: 320px;
+            background: rgba(4, 6, 12, 0.95);
+            border: 1px solid var(--border-glass);
+            border-radius: 12px;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .blueprint-svg {
+            width: 95%;
+            height: 95%;
+        }
+
+        /* Placement hub visual elements */
+        .placement-list {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .placement-card {
+            background: rgba(255, 255, 255, 0.01);
+            border: 1px solid var(--border-glass);
+            border-radius: 14px;
+            padding: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s;
+        }
+
+        .placement-card:hover {
+            border-color: var(--border-glow);
+        }
+
+        .comp-info {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .comp-logo {
+            width: 48px;
+            height: 48px;
+            border-radius: 10px;
+            background: rgba(245, 166, 35, 0.15);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            color: var(--accent-cyan);
+            font-size: 20px;
+            border: 1px solid rgba(245, 166, 35, 0.25);
+        }
+
+        .eligibility-tag {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .tag-eligible {
+            background: rgba(16, 185, 129, 0.12);
+            color: var(--accent-emerald);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+
+        .tag-ineligible {
+            background: rgba(244, 63, 94, 0.12);
+            color: var(--accent-rose);
+            border: 1px solid rgba(244, 63, 94, 0.3);
+        }
+
+        /* Study Companion cards */
+        .companion-tools {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+        }
+
+        .tool-card {
+            background: rgba(255, 255, 255, 0.01);
+            border: 1px solid var(--border-glass);
+            border-radius: 16px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .tool-card:hover {
+            border-color: var(--accent-cyan);
+            background: rgba(245, 166, 35, 0.04);
+            transform: translateY(-4px);
+        }
+
+        .tool-icon {
+            font-size: 28px;
+            color: var(--accent-cyan);
+            margin-bottom: 12px;
+        }
+
+        .tool-card h4 {
+            font-size: 15px;
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+
+        .tool-card p {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        /* 3D Flashcards Styles */
+        .flashcard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+            margin-top: 16px;
+        }
+
+        .flashcard-scene {
+            height: 160px;
+            perspective: 600px;
+        }
+
+        .flashcard {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.6s;
+            cursor: pointer;
+        }
+
+        .flashcard.is-flipped {
+            transform: rotateY(180deg);
+        }
+
+        .card-face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 16px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            border: 1px solid var(--border-glass);
+            background: rgba(12, 19, 38, 0.95);
+        }
+
+        .card-face-front {
+            color: var(--accent-cyan);
+            font-weight: 700;
+            font-size: 15px;
+            border-bottom: 3px solid var(--accent-cyan);
+        }
+
+        .card-face-back {
+            background: rgba(245, 166, 35, 0.08);
+            transform: rotateY(180deg);
+            color: var(--text-primary);
+            font-size: 12px;
+            line-height: 1.5;
+            border: 1px solid var(--accent-cyan);
+        }
+
+        /* Interactive quiz dashboard */
+        .quiz-panel {
+            background: rgba(6, 10, 20, 0.9);
+            border: 1px solid var(--border-glass);
+            border-radius: 16px;
+            padding: 24px;
+            margin-top: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .quiz-option {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--border-glass);
+            border-radius: 10px;
+            padding: 12px 16px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 13px;
+        }
+
+        .quiz-option:hover {
+            border-color: var(--accent-cyan);
+            background: rgba(245, 166, 35, 0.04);
+        }
+
+        .quiz-option.correct {
+            border-color: var(--accent-emerald) !important;
+            background: rgba(16, 185, 129, 0.1) !important;
+            color: var(--accent-emerald);
+        }
+
+        .quiz-option.incorrect {
+            border-color: var(--accent-rose) !important;
+            background: rgba(244, 63, 94, 0.1) !important;
+            color: var(--accent-rose);
+        }
+
+        /* Floating Active AI Twin Drawer */
+        .chat-drawer {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 380px;
+            height: 520px;
+            background: rgba(8, 12, 24, 0.98);
+            border: 1px solid var(--border-glass);
+            border-radius: 24px;
+            backdrop-filter: blur(24px);
+            box-shadow: 0 12px 50px rgba(0, 0, 0, 0.7);
+            display: flex;
+            flex-direction: column;
+            z-index: 100;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transform: scale(0.9) translateY(20px);
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .chat-drawer.open {
+            transform: scale(1) translateY(0);
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .chat-header {
+            background: linear-gradient(135deg, rgba(245, 166, 35, 0.15), rgba(15, 30, 54, 0.3));
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--border-glass);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .chat-twin-avatar {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .chat-avatar-icon {
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, var(--accent-violet), var(--accent-cyan));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            color: #060913;
+            box-shadow: 0 0 12px rgba(245, 166, 35, 0.45);
+        }
+
+        .chat-header-info h4 {
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .chat-header-info span {
+            font-size: 10px;
+            color: var(--accent-cyan);
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .chat-header-info span::before {
+            content: '';
+            display: inline-block;
+            width: 6px;
+            height: 6px;
+            background: var(--accent-emerald);
+            border-radius: 50%;
+            box-shadow: 0 0 6px var(--accent-emerald);
+        }
+
+        .close-chat {
+            cursor: pointer;
+            color: var(--text-secondary);
+            transition: color 0.2s;
+        }
+
+        .close-chat:hover {
+            color: #fff;
+        }
+
+        .chat-messages {
+            flex-grow: 1;
+            padding: 20px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .msg {
+            max-width: 80%;
+            padding: 12px 16px;
+            border-radius: 16px;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        .msg-bot {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--border-glass);
+            align-self: flex-start;
+            border-bottom-left-radius: 4px;
+        }
+
+        .msg-user {
+            background: linear-gradient(135deg, var(--accent-violet), var(--accent-cyan));
+            color: #060913;
+            font-weight: 500;
+            align-self: flex-end;
+            border-bottom-right-radius: 4px;
+        }
+
+        .chat-suggestions {
+            padding: 10px 20px;
+            display: flex;
+            gap: 8px;
+            overflow-x: auto;
+            border-top: 1px solid rgba(255, 255, 255, 0.03);
+            white-space: nowrap;
+        }
+
+        .suggest-pill {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--border-glass);
+            border-radius: 20px;
+            padding: 6px 12px;
+            font-size: 11px;
+            cursor: pointer;
+            color: var(--text-secondary);
+            transition: all 0.2s;
+        }
+
+        .suggest-pill:hover {
+            color: #000;
+            background: var(--accent-cyan);
+            border-color: var(--accent-cyan);
+        }
+
+        .chat-input-wrapper {
+            padding: 16px 20px;
+            border-top: 1px solid var(--border-glass);
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .chat-input {
+            flex-grow: 1;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--border-glass);
+            border-radius: 12px;
+            padding: 12px 16px;
+            color: #fff;
+            font-size: 13px;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .chat-input:focus {
+            border-color: var(--accent-cyan);
+        }
+
+        .send-msg-btn {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--accent-violet), var(--accent-cyan));
+            border-radius: 10px;
+            border: none;
+            color: #060913;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.2s;
+            font-weight: 700;
+        }
+
+        .send-msg-btn:hover {
+            opacity: 0.9;
+        }
+
+        /* Floating chat bubble trigger */
+        .chat-trigger {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--accent-violet), var(--accent-cyan));
+            border-radius: 50%;
+            box-shadow: 0 8px 30px rgba(245, 166, 35, 0.35);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: #060913;
+            cursor: pointer;
+            z-index: 99;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .chat-trigger:hover {
+            transform: scale(1.08) rotate(8deg);
+        }
+
+        /* Wayfinding Path Animations */
+        .nav-path {
+            stroke-dasharray: 8;
+            animation: dash 1s linear infinite;
+        }
+
+        @keyframes dash {
+            to {
+                stroke-dashoffset: -16;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Sidebar navigation -->
+    <div class="sidebar">
+        <div class="logo-container">
+            <i class="fa-solid fa-server logo-icon"></i>
+            <span class="logo-text">CampusOS</span>
+        </div>
+        
+        <ul class="menu-list">
+            <li class="menu-item active" onclick="switchView('overview')">
+                <i class="fa-solid fa-chart-line"></i> Overview
+            </li>
+            <li class="menu-item" onclick="switchView('navigation')">
+                <i class="fa-solid fa-map-location-dot"></i> Campus Twin Map
+            </li>
+            <li class="menu-item" onclick="switchView('careers')">
+                <i class="fa-solid fa-briefcase"></i> Career Hub
+            </li>
+            <li class="menu-item" onclick="switchView('study')">
+                <i class="fa-solid fa-graduation-cap"></i> Study Companion
+            </li>
+        </ul>
+
+        <div class="tenant-badge">
+            <span class="tenant-title">Active Tenant</span>
+            <span class="tenant-name">PVPPCOE, Sion, Mumbai</span>
+        </div>
+    </div>
+
+    <!-- Main Workspace -->
+    <div class="workspace">
+        <div class="workspace-header">
+            <div class="header-title">
+                <h1 id="dashboard-heading">PVPPCOE Dashboard</h1>
+                <p>Welcome back, Prathamesh! Academic Year 2026-2027.</p>
+            </div>
+            <div class="user-profile">
+                <span style="font-size: 13px; font-weight: 500;">Prathamesh S.</span>
+                <div class="profile-img">P</div>
+            </div>
+        </div>
+
+        <!-- 1. OVERVIEW VIEW -->
+        <div id="view-overview" class="view-panel active">
+            <div class="grid-12">
+                <!-- Academic Stats -->
+                <div class="glass-card" style="grid-column: span 8;">
+                    <div class="card-header">
+                        <span class="card-title"><i class="fa-solid fa-user-check"></i> Course Attendance Ratio</span>
+                        <span class="eligibility-tag tag-eligible" id="alert-status">Checking...</span>
+                    </div>
+                    <div class="attendance-container" id="attendance-box">
+                        <!-- DBMS -->
+                        <div class="attendance-ring">
+                            <svg class="svg-ring">
+                                <circle class="ring-bg" cx="40" cy="40" r="32"></circle>
+                                <circle class="ring-progress" cx="40" cy="40" r="32" stroke="var(--accent-emerald)" stroke-dasharray="201" stroke-dashoffset="24"></circle>
+                            </svg>
+                            <span class="sub-name">DBMS (88%)</span>
+                        </div>
+                        <!-- OS -->
+                        <div class="attendance-ring">
+                            <svg class="svg-ring">
+                                <circle class="ring-bg" cx="40" cy="40" r="32"></circle>
+                                <circle class="ring-progress" cx="40" cy="40" r="32" stroke="var(--accent-rose)" stroke-dasharray="201" stroke-dashoffset="72"></circle>
+                            </svg>
+                            <span class="sub-name">OS (64%) ⚠️</span>
+                        </div>
+                        <!-- ADA -->
+                        <div class="attendance-ring">
+                            <svg class="svg-ring">
+                                <circle class="ring-bg" cx="40" cy="40" r="32"></circle>
+                                <circle class="ring-progress" cx="40" cy="40" r="32" stroke="var(--accent-cyan)" stroke-dasharray="201" stroke-dashoffset="40"></circle>
+                            </svg>
+                            <span class="sub-name">ADA (80%)</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Academic GPAs -->
+                <div class="glass-card" style="grid-column: span 4; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center;">
+                    <span style="font-size: 13px; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 1px; font-weight: 600; margin-bottom: 8px;">Cumulative CGPA</span>
+                    <h2 style="font-size: 48px; font-weight: 800; color: var(--accent-cyan); text-shadow: 0 0 20px rgba(245, 166, 35, 0.35); font-family: 'JetBrains Mono', monospace;">8.72</h2>
+                    <span style="font-size: 12px; color: var(--accent-emerald); font-weight: 600; margin-top: 8px;" id="gpa-forecast"><i class="fa-solid fa-arrow-trend-up"></i> Top 10% of department</span>
+                </div>
+
+                <!-- Schedule slots -->
+                <div class="glass-card" style="grid-column: span 6;">
+                    <div class="card-header">
+                        <span class="card-title"><i class="fa-regular fa-clock"></i> Today's Schedule (Monday)</span>
+                    </div>
+                    <div class="slot-ticker" id="schedule-box">
+                        <div class="ticker-item">
+                            <div class="ticker-details">
+                                <h4>Database Management Systems (DBMS)</h4>
+                                <p>Prof. John Doe • Classroom 201</p>
+                            </div>
+                            <span class="ticker-time">09:00 - 10:30</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Live Campus Recommendations -->
+                <div class="glass-card" style="grid-column: span 6;">
+                    <div class="card-header">
+                        <span class="card-title"><i class="fa-solid fa-lightbulb"></i> Personalized Recommendations</span>
+                    </div>
+                    <div class="slot-ticker" id="recs-box">
+                        <div class="ticker-item" style="border-left-color: var(--accent-cyan);">
+                            <div class="ticker-details">
+                                <h4 style="color: var(--accent-cyan);">🎯 OS Core Preparation Recommended</h4>
+                                <p>OS attendance ratio (64%) is under limit. Revise CPU Scheduling notes!</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 2. CAMPUS TWIN MAP NAVIGATION VIEW -->
+        <div id="view-navigation" class="view-panel">
+            <div class="grid-12">
+                <div class="glass-card" style="grid-column: span 12;">
+                    <div class="map-wrapper">
+                        <div class="card-header">
+                            <span class="card-title"><i class="fa-solid fa-route"></i> PVPPCOE Indoor Wayfinder</span>
+                            <div class="map-controls">
+                                <button class="btn btn-outline" onclick="drawRoute('room203')"><i class="fa-solid fa-magnifying-glass"></i> Route to IT Room 203</button>
+                                <button class="btn btn-outline" onclick="drawRoute('lab3')"><i class="fa-solid fa-laptop-code"></i> Route to CSE Lab 3</button>
+                                <button class="btn" onclick="resetMap()"><i class="fa-solid fa-arrows-rotate"></i> Reset Location</button>
+                            </div>
+                        </div>
+
+                        <div class="map-canvas-container">
+                            <svg class="blueprint-svg" viewBox="0 0 600 300">
+                                <pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse">
+                                    <path d="M 20 0 L 0 0 0 20" fill="none" stroke="rgba(255, 255, 255, 0.02)" stroke-width="1"/>
+                                </pattern>
+                                <rect width="100%" height="100%" fill="url(#grid)" />
+
+                                <!-- Rooms -->
+                                <rect x="50" y="50" width="120" height="80" rx="6" fill="rgba(15, 30, 54, 0.2)" stroke="var(--border-glass)" stroke-width="1.5" />
+                                <text x="110" y="95" fill="var(--text-secondary)" font-size="12" text-anchor="middle" font-weight="600">Lobby (Start)</text>
+
+                                <rect x="240" y="50" width="120" height="80" rx="6" fill="rgba(15, 30, 54, 0.2)" stroke="var(--border-glass)" stroke-width="1.5" />
+                                <text x="300" y="95" fill="var(--text-secondary)" font-size="12" text-anchor="middle" font-weight="600">Room 201 (DBMS)</text>
+
+                                <rect x="430" y="50" width="120" height="80" rx="6" id="room203-box" fill="rgba(15, 30, 54, 0.2)" stroke="var(--border-glass)" stroke-width="1.5" style="transition: all 0.3s;" />
+                                <text x="490" y="95" fill="var(--text-secondary)" font-size="12" text-anchor="middle" font-weight="600">Room 203 (OS)</text>
+
+                                <rect x="240" y="180" width="310" height="80" rx="6" id="lab3-box" fill="rgba(15, 30, 54, 0.2)" stroke="var(--border-glass)" stroke-width="1.5" style="transition: all 0.3s;" />
+                                <text x="395" y="225" fill="var(--text-secondary)" font-size="12" text-anchor="middle" font-weight="600">Academic Lab 3</text>
+
+                                <!-- Navigation Nodes -->
+                                <circle cx="110" cy="150" r="6" fill="var(--accent-indigo)" />
+                                <circle cx="300" cy="150" r="6" fill="var(--accent-indigo)" />
+                                <circle cx="490" cy="150" r="6" fill="var(--accent-indigo)" />
+                                
+                                <path id="active-route" d="" fill="none" stroke="var(--accent-cyan)" stroke-width="4" stroke-linecap="round" class="nav-path" style="transition: stroke-dasharray 0.5s;" />
+
+                                <!-- Pin -->
+                                <circle cx="110" cy="150" r="10" fill="rgba(245, 166, 35, 0.2)" stroke="var(--accent-cyan)" stroke-width="2" id="loc-pin" />
+                            </svg>
+                        </div>
+                        <p style="font-size: 13px; color: var(--text-secondary); text-align: center;" id="nav-text"><i class="fa-solid fa-circle-info" style="color: var(--accent-cyan);"></i> Select a target room from wayfinder controls to draw shortest A* path corridors.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 3. CAREER HUB VIEW -->
+        <div id="view-careers" class="view-panel">
+            <div class="grid-12">
+                <!-- Resume Analyzer -->
+                <div class="glass-card" style="grid-column: span 5; display: flex; flex-direction: column; justify-content: space-between;">
+                    <div class="card-header">
+                        <span class="card-title"><i class="fa-solid fa-address-card"></i> AI Resume Assessment</span>
+                    </div>
+                    <div id="score-box" style="text-align: center; padding: 10px 0;">
+                        <h3 style="font-size: 40px; font-weight: 800; color: var(--accent-cyan);">Click Analyze</h3>
+                        <p style="font-size: 12px; color: var(--text-secondary); margin-top: 4px;">Compare resume vs Microsoft drive</p>
+                    </div>
+                    <textarea id="resume-text-input" style="background: rgba(0,0,0,0.2); border: 1px solid var(--border-glass); border-radius: 8px; color: white; padding: 10px; font-size: 11px; height: 70px; resize: none;" placeholder="Paste resume plain text..."></textarea>
+                    <button class="btn" style="margin-top: 10px;" onclick="runResumeAnalysis()"><i class="fa-solid fa-circle-nodes"></i> Scan Resume</button>
+                    <div style="font-size: 11px; display: flex; flex-direction: column; gap: 8px; border-top: 1px solid var(--border-glass); padding-top: 16px;" id="resume-report-box">
+                        <span style="color: var(--text-secondary);"><i class="fa-solid fa-circle-info"></i> Results will show matching strengths and skill gaps badges.</span>
+                    </div>
+                </div>
+
+                <!-- Placement Drives -->
+                <div class="glass-card" style="grid-column: span 7;">
+                    <div class="card-header">
+                        <span class="card-title"><i class="fa-solid fa-briefcase"></i> PVPPCOE Placement Pipeline</span>
+                    </div>
+                    <div class="placement-list" id="placements-box">
+                        <p style="color: var(--text-secondary)">Querying career hub databases...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 4. STUDY COMPANION VIEW -->
+        <div id="view-study" class="view-panel">
+            <div class="grid-12">
+                <div class="glass-card" style="grid-column: span 12;">
+                    <div class="card-header">
+                        <span class="card-title"><i class="fa-solid fa-graduation-cap"></i> Generative Study Suite</span>
+                    </div>
+                    <div class="companion-tools">
+                        <div class="tool-card" onclick="loadFlashcards()">
+                            <div class="tool-icon"><i class="fa-solid fa-clone"></i></div>
+                            <h4>Flashcard Creator</h4>
+                            <p>Generate vocabulary study flip decks instantly.</p>
+                        </div>
+                        <div class="tool-card" onclick="loadQuizPanel()">
+                            <div class="tool-icon" style="color: var(--accent-cyan);"><i class="fa-solid fa-circle-question"></i></div>
+                            <h4>Quiz Generator</h4>
+                            <p>Generate 3 multiple-choice practice questions.</p>
+                        </div>
+                        <div class="tool-card" onclick="runDocumentSummarizer()">
+                            <div class="tool-icon" style="color: var(--accent-emerald);"><i class="fa-solid fa-file-pdf"></i></div>
+                            <h4>PDF Summarizer</h4>
+                            <p>Summarize complex relational DBMS catalog notes.</p>
+                        </div>
+                    </div>
+
+                    <!-- Active Study Panel -->
+                    <div id="study-panel-container"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Active AI Twin trigger & Drawer -->
+    <div class="chat-trigger" id="chat-btn" onclick="toggleChat()">
+        <i class="fa-solid fa-robot"></i>
+    </div>
+
+    <div class="chat-drawer" id="chat-box">
+        <div class="chat-header">
+            <div class="chat-twin-avatar">
+                <div class="chat-avatar-icon"><i class="fa-solid fa-brain"></i></div>
+                <div class="chat-header-info">
+                    <h4>PVPPCOE Twin AI</h4>
+                    <span>Active Campus Core</span>
+                </div>
+            </div>
+            <i class="fa-solid fa-xmark close-chat" onclick="toggleChat()"></i>
+        </div>
+
+        <div class="chat-messages" id="chat-msg-area">
+            <div class="msg msg-bot">
+                Hello Prathamesh! I am your PVPPCOE Campus Digital Twin AI assistant. Ask me anything about classes, schedules, placements or campus directions!
+            </div>
+        </div>
+
+        <div class="chat-suggestions">
+            <span class="suggest-pill" onclick="triggerBotQuery('Which labs are free right now?')">Free Labs?</span>
+            <span class="suggest-pill" onclick="triggerBotQuery('Who teaches DBMS?')">DBMS Teacher?</span>
+            <span class="suggest-pill" onclick="triggerBotQuery('Am I eligible for upcoming placements?')">Placements?</span>
+            <span class="suggest-pill" onclick="triggerBotQuery('Which subjects require more attention?')">Attention?</span>
+        </div>
+
+        <div class="chat-input-wrapper">
+            <input type="text" class="chat-input" id="chat-user-input" placeholder="Ask campus digital twin..." onkeypress="handleKeyPress(event)">
+            <button class="send-msg-btn" onclick="sendUserMsg()"><i class="fa-solid fa-paper-plane"></i></button>
+        </div>
+    </div>
+
+    <!-- Core Interactive Client Scripts -->
+    <script>
+        const API_URL = "http://localhost:5000/api/v1";
+        let AUTH_TOKEN = "";
+        const TENANT_ID = "8f3e0984-7a3b-489e-b9ef-d4de20e17b88";
+
+        // Auto Login on startup
+        window.addEventListener('load', async () => {
+            try {
+                // Execute background authentications mapping user
+                const response = await fetch(`${API_URL}/auth/login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'X-Tenant-ID': TENANT_ID },
+                    body: JSON.stringify({ email: 'prathamesh@pvppcoe.ac.in', password: 'campus123' })
+                });
+                const data = await response.json();
+                if (data.success) {
+                    AUTH_TOKEN = data.token;
+                    console.log("CampusOS: Authenticated. JWT Lock complete.");
+                    bootstrapData();
+                }
+            } catch (err) {
+                console.error("Auth backend connection error. Running prototype modes.", err);
+            }
+        });
+
+        // Bootstrap analytics and recommendations from server
+        async function bootstrapData() {
+            try {
+                // 1. Fetch Analytics Telemetry
+                const anaRes = await fetch(`${API_URL}/analytics/telemetry`, {
+                    headers: { 'Authorization': `Bearer ${AUTH_TOKEN}`, 'X-Tenant-ID': TENANT_ID }
+                });
+                const telemetry = await resJson(anaRes);
+                if (telemetry) {
+                    updateTelemetryUI(telemetry);
+                }
+
+                // 2. Fetch Personalized Recommendations
+                const recRes = await fetch(`${API_URL}/recommendations/personalized`, {
+                    headers: { 'Authorization': `Bearer ${AUTH_TOKEN}`, 'X-Tenant-ID': TENANT_ID }
+                });
+                const recs = await resJson(recRes);
+                if (recs) {
+                    updateRecommendationsUI(recs);
+                }
+
+                // 3. Fetch Placements
+                loadPlacements();
+            } catch (error) {
+                console.error("Error bootstrapping campus statistics.", error);
+            }
+        }
+
+        async function resJson(res) {
+            if (res.status === 200) return await res.json();
+            return null;
+        }
+
+        function updateTelemetryUI(data) {
+            const container = document.getElementById('attendance-box');
+            container.innerHTML = '';
+            
+            let hasWarning = false;
+
+            data.attendanceRiskReport.forEach(e => {
+                const color = e.currentRatio >= 75 ? 'var(--accent-emerald)' : 'var(--accent-rose)';
+                const warningChar = e.currentRatio < 75 ? ' ⚠️' : '';
+                if (e.currentRatio < 75) hasWarning = true;
+
+                const ring = document.createElement('div');
+                ring.className = 'attendance-ring';
+                
+                const offset = 201 - (201 * e.currentRatio) / 100;
+                
+                ring.innerHTML = `
+                    <svg class="svg-ring">
+                        <circle class="ring-bg" cx="40" cy="40" r="32"></circle>
+                        <circle class="ring-progress" cx="40" cy="40" r="32" stroke="${color}" stroke-dasharray="201" stroke-dashoffset="${offset}"></circle>
+                    </svg>
+                    <span class="sub-name">${e.courseCode} (${e.currentRatio.toFixed(0)}%)${warningChar}</span>
+                `;
+                container.appendChild(ring);
+            });
+
+            // Update Alert badge
+            const badge = document.getElementById('alert-status');
+            if (hasWarning) {
+                badge.className = 'eligibility-tag tag-ineligible';
+                badge.innerText = 'Debarment Risk Alert';
+            } else {
+                badge.className = 'eligibility-tag tag-eligible';
+                badge.innerText = 'Curriculum Status OK';
+            }
+
+            // Forecast CGPA
+            const fc = data.performanceForecast;
+            document.getElementById('gpa-forecast').innerHTML = `
+                <i class="fa-solid fa-arrow-trend-up"></i> Projected final CGPA: ${fc.predictedCGPA} (${fc.performanceBand})
+            `;
+        }
+
+        function updateRecommendationsUI(data) {
+            // Update recommendations list
+            const recsBox = document.getElementById('recs-box');
+            recsBox.innerHTML = '';
+
+            const focus = data.recommendations.focusArea;
+            const focusDiv = document.createElement('div');
+            focusDiv.className = 'ticker-item';
+            focusDiv.style.borderLeftColor = 'var(--accent-rose)';
+            focusDiv.innerHTML = `
+                <div class="ticker-details">
+                    <h4 style="color: var(--accent-rose);">⚠️ Focus Subject: ${focus.courseName} (${focus.courseCode})</h4>
+                    <p>${focus.reason}</p>
+                </div>
+            `;
+            recsBox.appendChild(focusDiv);
+
+            // Recommed placements and events
+            if (data.recommendations.placements.length > 0) {
+                const p = data.recommendations.placements[0];
+                const pDiv = document.createElement('div');
+                pDiv.className = 'ticker-item';
+                pDiv.style.borderLeftColor = 'var(--accent-cyan)';
+                pDiv.innerHTML = `
+                    <div class="ticker-details">
+                        <h4>💼 placement Match: ${p.companyName}</h4>
+                        <p>${p.actionPrompt}</p>
+                    </div>
+                `;
+                recsBox.appendChild(pDiv);
+            }
+        }
+
+        async function loadPlacements() {
+            const pbox = document.getElementById('placements-box');
+            try {
+                const response = await fetch(`${API_URL}/career/drives`, {
+                    headers: { 'Authorization': `Bearer ${AUTH_TOKEN}`, 'X-Tenant-ID': TENANT_ID }
+                });
+                const data = await response.json();
+                if (data.success) {
+                    pbox.innerHTML = '';
+                    data.drives.forEach(drive => {
+                        const tagClass = drive.eligible ? 'tag-eligible' : 'tag-ineligible';
+                        const tagLabel = drive.eligible ? 'Eligible' : 'Ineligible';
+                        const detailMsg = drive.eligible ? 'Ready to apply' : drive.ineligibilityReason;
+
+                        const card = document.createElement('div');
+                        card.className = 'placement-card';
+                        card.innerHTML = `
+                            <div class="comp-info">
+                                <div class="comp-logo">${drive.company_name.substring(0,1)}</div>
+                                <div>
+                                    <h4 style="font-size: 15px; font-weight: 600;">${drive.company_name} – ${drive.job_title}</h4>
+                                    <p style="font-size: 12px; color: var(--text-secondary);">Salary: ${drive.salary_package} • Status: ${detailMsg}</p>
+                                </div>
+                            </div>
+                            <span class="eligibility-tag ${tagClass}">${tagLabel}</span>
+                        `;
+                        pbox.appendChild(card);
+                    });
+                }
+            } catch (err) {
+                pbox.innerHTML = '<p style="color: var(--accent-rose)">Database offline. Please retry later.</p>';
+            }
+        }
+
+        // Switch workspace views
+        function switchView(viewId) {
+            document.querySelectorAll('.view-panel').forEach(panel => {
+                panel.classList.remove('active');
+            });
+            document.querySelectorAll('.menu-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            
+            document.getElementById(`view-${viewId}`).classList.add('active');
+            event.currentTarget.classList.add('active');
+            
+            const heading = document.getElementById('dashboard-heading');
+            if (viewId === 'overview') heading.innerText = 'PVPPCOE Dashboard';
+            if (viewId === 'navigation') heading.innerText = 'PVPPCOE Indoor twin Wayfinder';
+            if (viewId === 'careers') heading.innerText = 'PVPPCOE Placements Hub';
+            if (viewId === 'study') heading.innerText = 'Generative Study Companion';
+        }
+
+        // Toggle chat drawer
+        function toggleChat() {
+            document.getElementById('chat-box').classList.toggle('open');
+        }
+
+        // Wayfinding path plotter
+        async function drawRoute(targetRoom) {
+            const pin = document.getElementById('loc-pin');
+            const route = document.getElementById('active-route');
+            const navText = document.getElementById('nav-text');
+            const rbox = document.getElementById('room203-box');
+            const lbox = document.getElementById('lab3-box');
+
+            try {
+                const response = await fetch(`${API_URL}/navigation/route?start=lobby&end=${targetRoom}`, {
+                    headers: { 'Authorization': `Bearer ${AUTH_TOKEN}`, 'X-Tenant-ID': TENANT_ID }
+                });
+                const data = await response.json();
+                if (data.success) {
+                    resetMap();
+                    
+                    const nodes = data.routeNodes;
+                    let pathD = `M ${nodes[0].x} ${nodes[0].y}`;
+                    for(let i=1; i<nodes.length; i++) {
+                        pathD += ` L ${nodes[i].x} ${nodes[i].y}`;
+                    }
+
+                    route.setAttribute('d', pathD);
+                    
+                    // Highlight targeted room
+                    const targetBox = targetRoom === 'room203' ? rbox : lbox;
+                    targetBox.style.fill = 'rgba(245, 166, 35, 0.18)';
+                    targetBox.style.stroke = 'var(--accent-cyan)';
+
+                    // Animate pin position
+                    setTimeout(() => {
+                        const finalNode = nodes[nodes.length - 1];
+                        pin.setAttribute('cx', finalNode.x);
+                        pin.setAttribute('cy', finalNode.y);
+                        navText.innerHTML = `<i class="fa-solid fa-route" style="color: var(--accent-cyan)"></i> <strong>Wayfinding Instructions:</strong> ${data.directions.join(' ')}`;
+                    }, 500);
+                }
+            } catch (err) {
+                console.error("Navigation error.", err);
+            }
+        }
+
+        function resetMap() {
+            const pin = document.getElementById('loc-pin');
+            const route = document.getElementById('active-route');
+            const rbox = document.getElementById('room203-box');
+            const lbox = document.getElementById('lab3-box');
+            const navText = document.getElementById('nav-text');
+
+            route.setAttribute('d', '');
+            pin.setAttribute('cx', '110');
+            pin.setAttribute('cy', '150');
+            
+            rbox.style.fill = 'rgba(15, 30, 54, 0.2)';
+            rbox.style.stroke = 'var(--border-glass)';
+            lbox.style.fill = 'rgba(15, 30, 54, 0.2)';
+            lbox.style.stroke = 'var(--border-glass)';
+            navText.innerHTML = '<i class="fa-solid fa-circle-info" style="color: var(--accent-cyan);"></i> Select a target room from wayfinder controls to draw shortest A* path.';
+        }
+
+        // Generative Flashcards Creator
+        async function loadFlashcards() {
+            const container = document.getElementById('study-panel-container');
+            container.innerHTML = '<p style="color: var(--accent-cyan)">Compiling digital flashcard decks...</p>';
+            
+            try {
+                const response = await fetch(`${API_URL}/companion/flashcards`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${AUTH_TOKEN}`, 'X-Tenant-ID': TENANT_ID },
+                    body: JSON.stringify({ notesText: 'Operating Systems schedules & B-Tree databases' })
+                });
+                const data = await response.json();
+                if (data.success) {
+                    container.innerHTML = '<div class="flashcard-grid" id="flash-box"></div>';
+                    const fbox = document.getElementById('flash-box');
+
+                    data.flashcards.forEach(card => {
+                        const scene = document.createElement('div');
+                        scene.className = 'flashcard-scene';
+                        scene.innerHTML = `
+                            <div class="flashcard" onclick="this.classList.toggle('is-flipped')">
+                                <div class="card-face card-face-front">${card.question}</div>
+                                <div class="card-face card-face-back">${card.answer}</div>
+                            </div>
+                        `;
+                        fbox.appendChild(scene);
+                    });
+                }
+            } catch (err) {
+                container.innerHTML = '<p style="color: var(--accent-rose)">AI Flashcard generator offline.</p>';
+            }
+        }
+
+        // Generative Quiz Engine
+        async function loadQuizPanel() {
+            const container = document.getElementById('study-panel-container');
+            container.innerHTML = '<p style="color: var(--accent-cyan)">Auto-generating custom quiz questions...</p>';
+
+            try {
+                const response = await fetch(`${API_URL}/companion/quiz`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${AUTH_TOKEN}`, 'X-Tenant-ID': TENANT_ID },
+                    body: JSON.stringify({ notesText: 'DBMS database normalizations and operating systems' })
+                });
+                const data = await response.json();
+                if (data.success) {
+                    container.innerHTML = '<div class="quiz-panel" id="quiz-box"></div>';
+                    const qbox = document.getElementById('quiz-box');
+                    
+                    const q = data.quizzes[0];
+                    const qTitle = document.createElement('h4');
+                    qTitle.innerHTML = `<i class="fa-solid fa-graduation-cap" style="color: var(--accent-cyan)"></i> <strong>Practice Question:</strong> ${q.question}`;
+                    qbox.appendChild(qTitle);
+
+                    q.options.forEach(opt => {
+                        const btn = document.createElement('div');
+                        btn.className = 'quiz-option';
+                        btn.innerText = opt;
+                        btn.onclick = () => {
+                            const allOpts = qbox.querySelectorAll('.quiz-option');
+                            allOpts.forEach(o => o.onclick = null); // Block multiple selections
+
+                            if (opt === q.correctAnswer) {
+                                btn.classList.add('correct');
+                                btn.innerHTML += '  ✅ (Correct!)';
+                            } else {
+                                btn.classList.add('incorrect');
+                                btn.innerHTML += '  ❌ (Wrong)';
+                                // Highlight correct option
+                                allOpts.forEach(o => {
+                                    if (o.innerText.trim() === q.correctAnswer) o.classList.add('correct');
+                                });
+                            }
+
+                            const exp = document.createElement('p');
+                            exp.style.fontSize = '12px';
+                            exp.style.color = 'var(--accent-cyan)';
+                            exp.style.marginTop = '10px';
+                            exp.innerHTML = `<strong>Explanation:</strong> ${q.explanation}`;
+                            qbox.appendChild(exp);
+                        };
+                        qbox.appendChild(btn);
+                    });
+                }
+            } catch (err) {
+                container.innerHTML = '<p style="color: var(--accent-rose)">AI Quiz Generator offline.</p>';
+            }
+        }
+
+        // Generative PDF Concept Summarizer
+        async function runDocumentSummarizer() {
+            const container = document.getElementById('study-panel-container');
+            container.innerHTML = '<p style="color: var(--accent-cyan)">Analyzing database notes vectors...</p>';
+
+            try {
+                const response = await fetch(`${API_URL}/companion/summarize`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${AUTH_TOKEN}`, 'X-Tenant-ID': TENANT_ID },
+                    body: JSON.stringify({ notesText: 'Database indexing using balance search trees creates sorted clustered rows.' })
+                });
+                const data = await response.json();
+                if (data.success) {
+                    container.innerHTML = `
+                        <div class="quiz-panel">
+                            <h4><i class="fa-solid fa-receipt" style="color: var(--accent-cyan)"></i> AI Concept Summary</h4>
+                            <div style="font-size: 13px; line-height: 1.6; color: var(--text-primary); margin-top: 10px;">
+                                ${data.summary.replace(/\n/g, '<br>')}
+                            </div>
+                        </div>
+                    `;
+                }
+            } catch (err) {
+                container.innerHTML = '<p style="color: var(--accent-rose)">Summarization module offline.</p>';
+            }
+        }
+
+        // AI Resume Scanner and Job Match Score Analyzer
+        async function runResumeAnalysis() {
+            const textInput = document.getElementById('resume-text-input').value.trim();
+            const scoreBox = document.getElementById('score-box');
+            const reportBox = document.getElementById('resume-report-box');
+
+            if (!textInput) {
+                alert("Please paste resume text into the text area before scanning!");
+                return;
+            }
+
+            scoreBox.innerHTML = '<h3 style="font-size: 28px; color: var(--accent-cyan)">Analyzing...</h3>';
+            
+            try {
+                const response = await fetch(`${API_URL}/career/analyze-resume`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${AUTH_TOKEN}`, 'X-Tenant-ID': TENANT_ID },
+                    body: JSON.stringify({ 
+                        resumeText: textInput, 
+                        jobDescription: "Requires high competency in relational databases, SQL indexing, operating systems threads and analysis of algorithms."
+                    })
+                });
+                const data = await response.json();
+                if (data.success) {
+                    const result = data.assessment;
+                    scoreBox.innerHTML = `
+                        <h3 style="font-size: 40px; font-weight: 800; color: var(--accent-cyan);">${result.matchScore}%</h3>
+                        <p style="font-size: 12px; color: var(--text-secondary); margin-top: 4px;">Alignment match ratio with Microsoft Drive</p>
+                    `;
+
+                    reportBox.innerHTML = '';
+                    
+                    const strDiv = document.createElement('div');
+                    strDiv.style.color = 'var(--accent-emerald)';
+                    strDiv.innerHTML = `<strong>Strengths Identified:</strong><br>` + result.strengths.map(s => `• ${s}`).join('<br>');
+                    reportBox.appendChild(strDiv);
+
+                    const gapDiv = document.createElement('div');
+                    gapDiv.style.color = 'var(--accent-rose)';
+                    gapDiv.style.marginTop = '10px';
+                    gapDiv.innerHTML = `<strong>Skill Gaps badge:</strong><br>` + result.skillGaps.map(g => `• ${g}`).join('<br>');
+                    reportBox.appendChild(gapDiv);
+
+                    const recsDiv = document.createElement('div');
+                    recsDiv.style.color = 'var(--accent-amber)';
+                    recsDiv.style.marginTop = '10px';
+                    recsDiv.innerHTML = `<strong>Course Guides Suggestions:</strong><br>` + result.recommendations.map(r => `• ${r}`).join('<br>');
+                    reportBox.appendChild(recsDiv);
+                }
+            } catch (err) {
+                scoreBox.innerHTML = '<h3 style="font-size: 24px; color: var(--accent-rose)">Scan Error</h3>';
+            }
+        }
+
+        // Active Chatbot Twin Integration
+        function triggerBotQuery(query) {
+            const box = document.getElementById('chat-box');
+            if (!box.classList.contains('open')) box.classList.add('open');
+            
+            const input = document.getElementById('chat-user-input');
+            input.value = query;
+            sendUserMsg();
+        }
+
+        function handleKeyPress(e) {
+            if (e.key === 'Enter') {
+                sendUserMsg();
+            }
+        }
+
+        async function sendUserMsg() {
+            const input = document.getElementById('chat-user-input');
+            const msg = input.value.trim();
+            if (!msg) return;
+
+            const area = document.getElementById('chat-msg-area');
+            
+            const udiv = document.createElement('div');
+            udiv.className = 'msg msg-user';
+            udiv.innerText = msg;
+            area.appendChild(udiv);
+            
+            input.value = '';
+            area.scrollTop = area.scrollHeight;
+
+            // Simulated bot typing indicators
+            const typing = document.createElement('div');
+            typing.className = 'msg msg-bot';
+            typing.id = 'bot-typing-id';
+            typing.innerText = "Querying college digital twin...";
+            area.appendChild(typing);
+            area.scrollTop = area.scrollHeight;
+
+            try {
+                const response = await fetch(`${API_URL}/ai/query`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${AUTH_TOKEN}`, 'X-Tenant-ID': TENANT_ID },
+                    body: JSON.stringify({ query: msg })
+                });
+                const data = await response.json();
+                
+                // Remove typing indicator and append answer
+                const typ = document.getElementById('bot-typing-id');
+                if (typ) typ.remove();
+
+                const bdiv = document.createElement('div');
+                bdiv.className = 'msg msg-bot';
+                bdiv.innerHTML = data.response.replace(/\n/g, '<br>');
+                area.appendChild(bdiv);
+                area.scrollTop = area.scrollHeight;
+
+            } catch (err) {
+                const typ = document.getElementById('bot-typing-id');
+                if (typ) typ.innerText = "Error establishing connection to PVPPCOE twin server.";
+            }
+        }
+    </script>
+</body>
+</html>
